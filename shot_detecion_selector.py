@@ -7,7 +7,7 @@ from torchinfo import summary
 from .AutoShot.utils import get_batches, get_frames
 from transnetv2 import TransNetV2
 from .AutoShot.model import AutoShot
-
+#
 class ShotDetection:
     """
     A class for performing shot detection on videos using either AutoShot or TransNetV2 models.
