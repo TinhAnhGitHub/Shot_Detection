@@ -8,7 +8,7 @@ Data part 1:
    - Phuc Nguyen: [AIC_VideoB1v2](https://www.kaggle.com/datasets/khitrnhxun/aic-videob1v2)
 
 Data part 2:
-   - Quan Tran: [AIC_VideoB2](https://www.kaggle.com/datasets/superheroinmordenday/aic-vidieob1v2)
+   - Quan Tran(2 notebook): [AIC_VideoB2](https://www.kaggle.com/datasets/superheroinmordenday/aic-vidieob1v2)
 
 Data part 3:
    - Leo Nguyen: [AIC_VideoB3v1](https://www.kaggle.com/datasets/khitrnhxun/aic-videob3-0)
