@@ -163,4 +163,5 @@ cython_debug/
 
 
 /TransNetV2
-
+/input_sample
+/output_sample
