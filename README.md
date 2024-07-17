@@ -1,5 +1,8 @@
 # Shot_Detection
-A shot detection repository, including TransnetV2 and AutoShot, containing pretained model
+A shot detection repository, including AutoShot, containing pretained model
+
+# How to use it in Kaggle/Colab notebook
 
 
-remember to add git clone transnetV2 example -> cd into transnet, and then pip install .
+
+
