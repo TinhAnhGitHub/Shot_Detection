@@ -1,11 +1,11 @@
-from supernet import TransNetV2Supernet
+from .Supernet import TransNetV2Supernet
 import os
 import torch
 import numpy as np
 from typing import Dict, List, Tuple, Optional
 
-from utils import get_batches, get_frames
-import tqdm
+from .utils import get_batches, get_frames
+from tqdm import tqdm 
 
 class AutoShot:
     """
@@ -81,27 +81,31 @@ class AutoShot:
         """
         
         predictions = []
-        for batch in tqdm(get_batches(frames= frames)):
+        for batch in tqdm(get_batches(frames)):
             predict = self.predict(batch=batch)
             predictions.append(predict[25:75])
         return np.concatenate(predictions, 0)[:len(frames)]
 
-    def process_videos(self, video_dict: Dict[str, np.ndarray]) -> Dict[str, np.ndarray]:
-        """
-        Process multiple videos for shot detection.
+    def process_videos(self, video_dict_path: Dict[str, Dict]) -> Dict[str, Dict]:
+        """Process multiple videos for shot detection
 
         Args:
-            video_dict (Dict[str, np.ndarray]): Dictionary mapping video names to frame arrays.
+            video_dict_path (Dict[str, Dict[str, str]]): dictionary mapping folder
 
         Returns:
-            Dict[str, np.ndarray]: Dictionary mapping video names to shot detection predictions.
+            Dict[str, Dict[str, List[List[int]]]]: _description_
         """
-        results = {}
-        for fnm, video_path in tqdm(video_dict.items()):
-            frame_array = get_frames(video_file_path=video_path)
-            predictions = self.detect_shots(frame_array)
-            results[fnm] = predictions
-        return results
+        def process_nested(nested_dict: Dict) -> Dict:
+            result = {}
+            for key, value in nested_dict.items():
+                if isinstance(value, dict):
+                    result[key] = process_nested(value)
+                else:
+                    frame_array = get_frames(video_file_path=value)
+                    predictions = self.detect_shots(frame_array)
+                    result[key] = self.predictions_to_scenes(predictions)
+            return result
+        return process_nested(video_dict_path)
     
     @staticmethod
     def predictions_to_scenes(predictions: np.ndarray, threshold: float = 0.5) -> np.ndarray:
