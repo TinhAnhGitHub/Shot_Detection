@@ -2,11 +2,10 @@ import os
 import torch
 import numpy as np
 import tqdm
-from typing import Dict
+from typing import Dict, Union
 from torchinfo import summary
-from .AutoShot.utils import get_batches, get_frames
-from transnetv2 import TransNetV2
-from .AutoShot.model import AutoShot
+from AutoShot.utils import get_batches, get_frames
+from AutoShot.model import AutoShot
 #
 class ShotDetection:
     """
@@ -18,13 +17,11 @@ class ShotDetection:
         Initialize the ShotDetection class.
 
         Args:
-            choice (str): The model to use for shot detection. Either 'autoshot' or 'transnetv2'.
+            choice (str): The model to use for shot detection.
         """
         self.choice = choice.lower()
         if self.choice == 'autoshot':
             self.model = AutoShot("./AutoShot/model_weight/ckpt_0_200_0.pth")
-        elif self.choice == 'transnetv2':
-            self.model = TransNetV2()
         else:
             raise ValueError("Invalid choice. Please choose 'autoshot' or 'transnetv2'.")
 
@@ -38,54 +35,21 @@ class ShotDetection:
         Returns:
             Dict[str, np.ndarray]: A dictionary mapping video names to their detected scene boundaries.
         """
-        if self.choice == 'autoshot':
-            return self._run_autoshot(video_path_dict)
-        else:
-            return self._run_transnetv2(video_path_dict)
+       
+        return self._run_autoshot(video_path_dict)
+       
 
-    def _run_autoshot(self, video_path_dict: Dict[str, str]) -> Dict[str, np.ndarray]:
+    def _run_autoshot(self, video_path_dict: Dict[str, Union[str, Dict]]) -> Dict[str, Union[np.ndarray, Dict]]:
         """
         Run shot detection using the AutoShot model.
 
         Args:
-            video_path_dict (Dict[str, str]): A dictionary mapping video names to their file paths.
+            video_path_dict (Dict[str, Union[str, Dict]]): A nested dictionary mapping video names or folder names
+                                                           to their file paths or further nested dictionaries.
 
         Returns:
-            Dict[str, np.ndarray]: A dictionary mapping video names to their detected scene boundaries.
+            Dict[str, Union[np.ndarray, Dict]]: A nested dictionary mapping video names or folder names
+                                                to their detected scene boundaries or further nested dictionaries.
         """
-        results = self.model.process_videos(video_path_dict)
-        prediction_scenes = {}
-        for video_name, predictions in results.items():
-            prediction_scenes[video_name] = self.model.predictions_to_scenes(predictions)
-        return prediction_scenes
-
-    def _run_transnetv2(self, video_path_dict: Dict[str, str]) -> Dict[str, np.ndarray]:
-        """
-        Run shot detection using the TransNetV2 model.
-
-        Args:
-            video_path_dict (Dict[str, str]): A dictionary mapping video names to their file paths.
-
-        Returns:
-            Dict[str, np.ndarray]: A dictionary mapping video names to their detected scene boundaries.
-        """
-        result = {}
-        for fnm, video_path in tqdm.tqdm(video_path_dict.items(), desc="Processing videos"):
-            _, single_frame_predictions, _ = self.model.predict_video(video_path)
-            scenes = self.model.predictions_to_scenes(single_frame_predictions)
-            result[fnm] = scenes
-        return result
-
-    @staticmethod
-    def get_model_summary(model: torch.nn.Module, input_size: tuple = (1, 3, 27, 48)) -> str:
-        """
-        Generate a summary of the model architecture using torchinfo.
-
-        Args:
-            model (torch.nn.Module): The model to summarize.
-            input_size (tuple): The input size for the model. Default is (1, 3, 27, 48).
-
-        Returns:
-            str: A string representation of the model summary.
-        """
-        return str(summary(model, input_size=input_size, verbose=0))
+        res = self.model.process_videos(video_path_dict)
+        return res
