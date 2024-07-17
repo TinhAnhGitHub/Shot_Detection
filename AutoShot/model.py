@@ -1,4 +1,4 @@
-from .Supernet import TransNetV2Supernet
+from supernet import TransNetV2Supernet
 import os
 import torch
 import numpy as np
