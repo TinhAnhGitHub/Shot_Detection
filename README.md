@@ -21,7 +21,7 @@ Data part 3:
 Here is the interface
 ![interface](/images/image-1.png)
 #### 2. Run the note based on the sample
-(notebook sample)[https://www.kaggle.com/code/anhnguynnhtinh/detection-notebook-usage/edit]
+(notebook sample)[https://drive.google.com/file/d/1JZQKlL7EtXKdIdz30ln7JBbDaXHVPixH/view?usp=drive_link]
 
 
 
