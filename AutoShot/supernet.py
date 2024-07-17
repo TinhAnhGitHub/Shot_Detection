@@ -8,7 +8,7 @@ import torch.nn.functional as F
 from einops import rearrange
 from einops.layers.torch import Rearrange
 
-from linear import Linear_
+from .linear import Linear_
 
 
 class TransNetV2Supernet(nn.Module):

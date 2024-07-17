@@ -22,10 +22,11 @@ def get_frames(video_file_path: str, width:int = 48, height:int = 27) -> np.ndar
         # return a pipe instead of a file, rawvideo, pixel_format = 24-bit rgb, 
         .run(capture_stdout=True, capture_stderr=True)
     )
-    np.frombuffer(
+    video = np.frombuffer(
         video_stream,
         np.uint8
     ).reshape([-1, height, width, 3])
+    return video
 
 def get_batches(frames: np.ndarray) -> callable:
         """
@@ -42,12 +43,9 @@ def get_batches(frames: np.ndarray) -> callable:
             reminder = 0
         frames = np.concatenate([frames[:1]] * 25 + [frames] + [frames[-1:]] * (reminder + 25), 0)
 
-        def batch_generator():
-            for i in range(0, len(frames) - 50, 50):
-                yield frames[i:i + 100]
-
-        return batch_generator
-
+        
+        for i in range(0, len(frames) - 50, 50):
+            yield frames[i:i + 100]
 
 def predictions_to_scenes(predictions: np.ndarray) -> np.ndarray:
     """
