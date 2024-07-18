@@ -31,7 +31,7 @@ class KeyFrameExtractor:
                         video_keyframe_dir = os.path.join(self.keyframe_dir, output_prefix)
                         os.makedirs(video_keyframe_dir, exist_ok=True)
                         
-                        keyframe_path = os.path.join(self.keyframe_dir, f"{output_prefix}_scene_{i}_frame_{j}.jpg")
+                        keyframe_path = os.path.join(video_keyframe_dir, f"{output_prefix}_scene_{i}_frame_{j}.jpg")
                         if not self.save_frame(frame=frame, filename=keyframe_path):
                              print(f"Failed to save frame {frame_idx} for video {output_prefix}")
                     else:
