@@ -3,6 +3,10 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+
+/input_sample
+
+
 # C extensions
 *.so
 
@@ -162,6 +166,4 @@ cython_debug/
 #.idea/
 
 
-/TransNetV2
-/input_sample
-/output_sample
+
