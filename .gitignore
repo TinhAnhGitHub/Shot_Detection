@@ -4,8 +4,8 @@ __pycache__/
 *$py.class
 
 
-/input_sample
-
+ads_game_vid_sample/
+output_sample/
 
 # C extensions
 *.so
