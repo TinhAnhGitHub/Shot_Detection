@@ -7,10 +7,20 @@ from tqdm import tqdm
 
 
 class VideoProcessor:
-    def __init__(self, pretrained_model_path: str, keyframe_dir: str, credentials_path: str, token_path: str, drive_folder_id: str):
+    def __init__(self, pretrained_model_path: str, keyframe_dir: str, credentials_path: str, token_path: str, drive_folder_id: str,  user_service_account = True):
         self.shot_detector = AutoShot(pretrained_model_path)
         self.keyframe_extractor = KeyFrameExtractor(keyframe_dir)
-        self.drive_uploader = DriveUploader(credentials_path, token_path)
+        if user_service_account:
+
+            self.drive_uploader = DriveUploader(
+                    credentials_path=credentials_path,
+                    use_service_account=True
+                ) 
+        else:
+            self.drive_uploader = DriveUploader(
+                credentials_path=credentials_path,
+                token_path=token_path
+            )
         self.drive_folder_id = drive_folder_id
 
     def process_videos(self, video_dict: Dict[str, Any]) -> None:
