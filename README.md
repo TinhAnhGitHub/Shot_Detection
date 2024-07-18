@@ -17,9 +17,9 @@ Data part 3:
 
 ### 2. Step-by-step
 #### 1. Create newnotebook from dataset
-![Notebook](/images/image.png)
+![Notebook](/static/image.png)
 Here is the interface
-![interface](/images/image-1.png)
+![interface](/static/image-1.png)
 #### 2. Run the note based on the sample
 (notebook sample)[https://drive.google.com/file/d/1JZQKlL7EtXKdIdz30ln7JBbDaXHVPixH/view?usp=drive_link]
 
