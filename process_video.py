@@ -2,13 +2,16 @@ import os
 from typing import Dict, Any
 from AutoShot.model import AutoShot
 from AutoShot.keyframe_extractor import KeyFrameExtractor
+from drive_loader import DriveUploader
 from tqdm import tqdm
 
 
 class VideoProcessor:
-    def __init__(self, pretrained_model_path: str, keyframe_output_dir: str):
+    def __init__(self, pretrained_model_path: str, keyframe_dir: str, credentials_path: str, token_path: str, drive_folder_id: str):
         self.shot_detector = AutoShot(pretrained_model_path)
-        self.keyframe_extractor = KeyFrameExtractor(keyframe_output_dir)
+        self.keyframe_extractor = KeyFrameExtractor(keyframe_dir)
+        self.drive_uploader = DriveUploader(credentials_path, token_path)
+        self.drive_folder_id = drive_folder_id
 
     def process_videos(self, video_dict: Dict[str, Any]) -> None:
         total_videos = sum(1 for _ in self._flatten_dict(video_dict))
@@ -29,9 +32,19 @@ class VideoProcessor:
                             scenes = self.shot_detector.process_video(value)
                             
                             if scenes:
+                                print(f"Detected {len(scenes)} scenes in {new_path}")
                                 try:
+                                    video_keyframe_dir = os.path.join(self.keyframe_extractor.keyframe_dir, new_path)
                                     self.keyframe_extractor.extract_keyframes(value, scenes, new_path)
-                                    print(f"Finished processing: {new_path}")
+                                    print(f"Finished extracting keyframes for {new_path}")
+
+                                    # Create a folder in Google Drive for this video
+                                    drive_folder_id = self.drive_uploader.create_folder_tree(self.drive_folder_id, new_path)
+
+                                    # Upload keyframes to Google Drive
+                                    self.drive_uploader.upload_folder(video_keyframe_dir, drive_folder_id)
+                                    print(f"Uploaded keyframes for {new_path} to Google Drive")
+
                                 except RuntimeError as e:
                                     print(f"Error extracting keyframes from {new_path}: {str(e)}")
                             else:
