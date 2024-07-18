@@ -1,75 +1,54 @@
 import numpy as np
-import os 
 import ffmpeg
 
-
-def get_frames(video_file_path: str, width:int = 48, height:int = 27) -> np.ndarray:
-    """Extract frames from video
-
-    Args:
-        video_file_path (str): Path to the video file
-        width (int, optional): width of the extracted frame. Defaults to 320.
-        height (int, optional): height of the extracted frames. Defaults to 240.
-
-    Returns:
-        np.ndarray: Array of video frames
+def get_frames(video_file_path: str, width: int = 48, height: int = 27) -> np.ndarray:
     """
-
-    video_stream, _ = (
-        ffmpeg
-        .input(video_file_path)
-        .output('pipe:', format='rawvideo', pix_fmt='rgb24', s=f'{width}x{height}')
-        # return a pipe instead of a file, rawvideo, pixel_format = 24-bit rgb, 
-        .run(capture_stdout=True, capture_stderr=True)
-    )
-    video = np.frombuffer(
-        video_stream,
-        np.uint8
-    ).reshape([-1, height, width, 3])
-    return video
-
-def get_batches(frames: np.ndarray) -> callable:
-        """
-        Prepare batches of frames for processing.
-
-        Args:
-            frames (np.ndarray): Array of video frames.
-
-        Returns:
-            callable: Generator function for frame batches.
-        """
-        reminder = 50 - len(frames) % 50
-        if reminder == 50:
-            reminder = 0
-        frames = np.concatenate([frames[:1]] * 25 + [frames] + [frames[-1:]] * (reminder + 25), 0)
-
+    Extract frames from video like you're performing a magic trick, but with more swearing.
+    
+    Args:
+        video_file_path (str): Path to the video file. Don't fuck this up.
+        width (int): Width of the extracted frame. Default is 48, because we're not made of pixels.
+        height (int): Height of the extracted frames. Default is 27, because odd numbers are cool.
+    
+    Returns:
+        np.ndarray: Array of video frames. If this fails, you're proper fucked.
+    """
+    try:
+        probe = ffmpeg.probe(video_file_path)
+        video_info = next(s for s in probe['streams'] if s['codec_type'] == 'video')
+        _ = int(video_info['nb_frames'])
         
-        for i in range(0, len(frames) - 50, 50):
-            yield frames[i:i + 100]
+        out, _ = (
+            ffmpeg
+            .input(video_file_path)
+            .output('pipe:', format='rawvideo', pix_fmt='rgb24', s=f'{width}x{height}')
+            .run(capture_stdout=True, capture_stderr=True)
+        )
+        
+        video = np.frombuffer(out, np.uint8).reshape([-1, height, width, 3])
+        return video
+    except ffmpeg.Error as e:
+        print(f"ffmpeg error: {e.stderr.decode()}")
+        raise
+    except Exception as e:
+        print(f"Error in get_frames: {str(e)}")
+        raise
 
-def predictions_to_scenes(predictions: np.ndarray) -> np.ndarray:
+def get_batches(frames: np.ndarray):
     """
-    Convert binary predictions back into scene annotations.
-
+    Prepare batches of frames for processing. It's like making a video sandwich.
+    
     Args:
-        predictions (np.ndarray): Binary predictions for each frame.
-
-    Returns:
-        np.ndarray: Array of scene start and end frames.
+        frames (np.ndarray): Array of video frames. Try not to feed it pictures of your ex.
+    
+    Yields:
+        np.ndarray: Batches of frames, because processing all at once would make your computer cry.
     """
-    scenes = []
-    t, t_prev, start = -1, 0, 0
-    for i, t in enumerate(predictions):
-        if t_prev == 1 and t == 0:
-            start = i
-        if t_prev == 0 and t == 1 and i != 0:
-            scenes.append([start, i])
-        t_prev = t
-    if t == 0:
-        scenes.append([start, i])
+    reminder = 50 - len(frames) % 50
+    if reminder == 50:
+        reminder = 0
+    frames = np.concatenate([frames[:1]] * 25 + [frames] + [frames[-1:]] * (reminder + 25), 0)
 
-    # just fix if all predictions are 1
-    if len(scenes) == 0:
-        return np.array([[0, len(predictions) - 1]], dtype=np.int32)
-
-    return np.array(scenes, dtype=np.int32)
+    
+    for i in range(0, len(frames) - 50, 50):
+        yield frames[i:i + 100]
