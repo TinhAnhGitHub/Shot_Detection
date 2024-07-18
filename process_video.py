@@ -10,6 +10,7 @@ class VideoProcessor:
     def __init__(self, pretrained_model_path: str, keyframe_dir: str, credentials_path: str, token_path: str, drive_folder_id: str,  user_service_account = True):
         self.shot_detector = AutoShot(pretrained_model_path)
         self.keyframe_extractor = KeyFrameExtractor(keyframe_dir)
+        #### DEBUG 
         if user_service_account:
 
             self.drive_uploader = DriveUploader(
