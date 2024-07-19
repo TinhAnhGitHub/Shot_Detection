@@ -16,7 +16,7 @@ Data part 3:
    - Quang Hao: [AIC_VideoB3v3](https://www.kaggle.com/datasets/nguynlngnamanh/aic-videob3-2)
 
 
-
+## 2. Heads to the dataset, and create a notebook there
 #### 2.1. Create Kaggle account
 1. Create account Kaggle with your gmail account
 2. Then go to setting -> go to `phone verify`, and add your phone number
