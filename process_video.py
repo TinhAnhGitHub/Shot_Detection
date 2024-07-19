@@ -11,18 +11,18 @@ class VideoProcessor:
         self.shot_detector = AutoShot(pretrained_model_path)
         self.keyframe_extractor = KeyFrameExtractor(keyframe_dir)
         #### DEBUG 
-        # if user_service_account:
+        if user_service_account:
 
-        #     self.drive_uploader = DriveUploader(
-        #             credentials_path=credentials_path,
-        #             use_service_account=True
-        #         ) 
-        # else:
-        #     self.drive_uploader = DriveUploader(
-        #         credentials_path=credentials_path,
-        #         token_path=token_path
-        #     )
-        # self.drive_folder_id = drive_folder_id
+            self.drive_uploader = DriveUploader(
+                    credentials_path=credentials_path,
+                    use_service_account=True
+                ) 
+        else:
+            self.drive_uploader = DriveUploader(
+                credentials_path=credentials_path,
+                token_path=token_path
+            )
+        self.drive_folder_id = drive_folder_id
 
     def process_videos(self, video_dict: Dict[str, Any]) -> None:
         total_videos = sum(1 for _ in self._flatten_dict(video_dict))
