@@ -22,6 +22,8 @@ class KeyFrameExtractor:
                 raise FileNotFoundError(f"Video file not found: {video_path}")
 
             cap = cv2.VideoCapture(video_path)
+            last_folder = os.path.basename(output_prefix)
+
             for i, (start, end) in enumerate(scenes):
                 sample_frames = self.sample_frames_from_shot(start, end)
                 for j, frame_idx in enumerate(sample_frames):
@@ -31,7 +33,9 @@ class KeyFrameExtractor:
                         video_keyframe_dir = os.path.join(self.keyframe_dir, output_prefix)
                         os.makedirs(video_keyframe_dir, exist_ok=True)
                         
-                        keyframe_path = os.path.join(video_keyframe_dir, f"scene_{i}_frame_{j}.jpg")
+                        keyframe_filename = f"video_{last_folder}_index_{frame_idx}.jpg"
+                        keyframe_path = os.path.join(video_keyframe_dir, keyframe_filename)
+                        
                         if not self.save_frame(frame=frame, filename=keyframe_path):
                              print(f"Failed to save frame {frame_idx} for video {output_prefix}")
                     else:
