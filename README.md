@@ -15,8 +15,7 @@ Data part 3:
    - Leo Nguyen: [AIC_VideoB3v2](https://www.kaggle.com/datasets/superheroinmordenday/aic-b2-v3)
    - Quang Hao: [AIC_VideoB3v3](https://www.kaggle.com/datasets/nguynlngnamanh/aic-videob3-2)
 
-## 2. Step-by-step instruction
-<br>
+
 
 #### 2.1. Create Kaggle account
 1. Create account Kaggle with your gmail account
