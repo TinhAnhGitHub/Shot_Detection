@@ -24,9 +24,9 @@ class KeyFrameExtractor:
             cap = cv2.VideoCapture(video_path)
             last_folder = os.path.basename(output_prefix)
 
-            for i, (start, end) in enumerate(scenes):
+            for _, (start, end) in enumerate(scenes):
                 sample_frames = self.sample_frames_from_shot(start, end)
-                for j, frame_idx in enumerate(sample_frames):
+                for _, frame_idx in enumerate(sample_frames):
                     cap.set(cv2.CAP_PROP_POS_FRAMES, float(frame_idx))
                     ret, frame = cap.read()
                     if ret:

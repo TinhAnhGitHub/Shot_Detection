@@ -47,7 +47,7 @@ class AutoShot:
             
             print(f"Loading the pretrained model from {pretrained_path}")
             model_dict = model.state_dict()
-            pretrained_dict = torch.load(pretrained_path, map_location=self.device)
+            pretrained_dict = torch.load(pretrained_path, map_location=self.device, weights_only=True)
             pretrained_dict = {k: v for k, v in pretrained_dict['net'].items() if k in model_dict}
             print(f"Current model has {len(model_dict)} params, Updating {len(pretrained_dict)} params")
             model_dict.update(pretrained_dict)
