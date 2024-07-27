@@ -16,6 +16,3 @@ Data part 3:
    - Quang Hao: [AIC_VideoB3v3](https://www.kaggle.com/datasets/nguynlngnamanh/aic-videob3-2)
 
 
-
-## 2. Run the notebook with the following format
-[Link](https://www.kaggle.com/code/anhnguyenhehe/shotdetection/edit)
