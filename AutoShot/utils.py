@@ -14,10 +14,6 @@ def get_frames(video_file_path: str, width: int = 48, height: int = 27) -> np.nd
         np.ndarray: Array of video frames. If this fails, you're proper fucked.
     """
     try:
-        probe = ffmpeg.probe(video_file_path)
-        video_info = next(s for s in probe['streams'] if s['codec_type'] == 'video')
-        _ = int(video_info['nb_frames'])
-        
         out, _ = (
             ffmpeg
             .input(video_file_path)
