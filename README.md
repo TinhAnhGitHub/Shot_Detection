@@ -15,5 +15,5 @@ Data part 3:
    - Leo Nguyen: [AIC_VideoB3v2](https://www.kaggle.com/datasets/superheroinmordenday/aic-b2-v3)
    - Quang Hao: [AIC_VideoB3v3](https://www.kaggle.com/datasets/nguynlngnamanh/aic-videob3-2)
 
-
-## 2. Add links
+## 2. Link Notebook Sample
+[Link](https://www.kaggle.com/code/anhnguyenhehe/shotdetection/edit)
