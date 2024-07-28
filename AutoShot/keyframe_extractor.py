@@ -33,7 +33,7 @@ class KeyFrameExtractor:
                         video_keyframe_dir = os.path.join(self.keyframe_dir, output_prefix)
                         os.makedirs(video_keyframe_dir, exist_ok=True)
                         
-                        keyframe_filename = f"video_{last_folder}_index_{frame_idx}.jpg"
+                        keyframe_filename = f"{frame_idx:06d}.jpg"
                         keyframe_path = os.path.join(video_keyframe_dir, keyframe_filename)
                         
                         if not self.save_frame(frame=frame, filename=keyframe_path):
